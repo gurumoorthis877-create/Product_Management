@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inventory Management System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .content { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{url_for('dashboard')}}">Inventory</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    
+                    <li class="nav-item me-10y">
+                        <a class="nav-link text-white" href="{{url_for('warehouse')}}">Warehouses</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link text-white" href="{{url_for('products')}}">Products</a>
+                    </li>
+                    <li class="nav-item me-10y">
+                        <a class="nav-link text-white" href="{{url_for('movement')}}">Transaction</a>
+                    </li>
+                    <li class="nav-item me-10y">
+                        <a class="nav-link text-white" href="{{url_for('report')}}">Report</a>
+                    </li>
+                   
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+
+    <div class="container content">
+        {% block content %}{% endblock %}
+    </div>
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+    <script>
+       document.querySelectorAll('.edit-product-btn').forEach(button => {
+        button.addEventListener('click', function() {
+
+            document.getElementById('productId').value = this.dataset.id;
+            document.getElementById('name').value = this.dataset.name;
+            document.getElementById('prodPrice').value = this.dataset.price;
+            document.getElementById('prodQuantity').value = this.dataset.quantity;
+            document.getElementById('categorySelect').value = this.dataset.category;
+            document.querySelector('[name="warehouse_id"]').value = this.dataset.warehouse;
+
+            document.getElementById('productForm').action = '/edit_products';
+            document.getElementById('saveButton').textContent = 'Update';
+            document.getElementById('myModalLabel').textContent = 'Edit Product';
+            });
+        });
+        
+        
+        document.getElementById('myModal').addEventListener('hidden.bs.modal', function() {
+            const form = document.getElementById('productForm');
+            form.reset();
+            form.action = '/add_product';
+            document.getElementById('productId').value = '';
+            document.getElementById('saveButton').textContent = 'Save';
+            document.getElementById('myModalLabel').textContent = 'Add Product';
+        });
+
+        document.querySelectorAll('.edit-warehouse-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                document.getElementById('warehouse_id').value = this.dataset.id;
+                document.getElementById('name').value = this.dataset.name;
+                document.getElementById('address').value = this.dataset.address;
+                document.getElementById('contact').value = this.dataset.contact;
+
+                document.getElementById('warehouseForm').action = '/edit_warehouse';
+                document.getElementById('saveButton').textContent = 'Update';
+                document.getElementById('myModalLabel').textContent = 'Edit Warehouse';
+            });
+        });
+
+        document.getElementById('myModal').addEventListener('hidden.bs.modal', function () {
+            const form = document.getElementById('warehouseForm');
+            form.reset();
+            form.action = '/add_warehouse';
+            document.getElementById('warehouse_id').value = '';
+            document.getElementById('saveButton').textContent = 'Save';
+            document.getElementById('myModalLabel').textContent = 'Add Warehouse';
+        });
+
+    </script>
+        
+</body>
+</html>

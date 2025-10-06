@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Inventory Management{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Dashboard</h2>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary-subtle shadow rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Total Products</h5>
+                    <h2 class="card-text text-dark">{{ total_products }}</h2>
+                    <a href="{{ url_for('products') }}" class="btn btn-dark btn-sm mt-3">View Products</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-info-subtle shadow rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Total Warehouses</h5>
+                    <h2 class="card-text text-dark">{{ total_warehouses }}</h2>
+                    <a href="{{ url_for('warehouse') }}" class="btn btn-dark btn-sm mt-3">View Warehouses</a>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-md-4">
+            <div class="card text-white bg-success-subtle shadow rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Low Stock Products</h5>
+                    <h2 class="card-text text-dark">{{ low_stock }}</h2>
+                    <a href="{{ url_for('products') }}" class="btn btn-dark btn-sm mt-3">Review Products</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Recent Product Movements</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_movements %}
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>From Location</th>
+                                <th>To Location</th>
+                                <th>Quantity</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for move in recent_movements %}
+                            <tr>
+                                <td>{{ move['product_name'] }}</td>
+                                <td>{{ move['from_location'] }}</td>
+                                <td>{{ move['to_location'] }}</td>
+                                <td>{{ move['quantity'] }}</td>
+                                <td>{{ move['timestamp'].strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                        <p class="text-muted">No recent movements.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Stock by Category</h5>
+                </div>
+                <div class="card-body">
+                    {% if stock_by_category %}
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Category</th>
+                                <th>Total Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in stock_by_category %}
+                            <tr>
+                                <td>{{ category['category'] }}</td>
+                                <td>{{ category['total_quantity'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                        <p class="text-muted">No category data available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

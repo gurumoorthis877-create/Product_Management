@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header bg-primary-subtle text-dark d-flex justify-content-between align-items-center">
+        <h3>Food Products</h3>
+        <button class="btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#myModal">Add Product</button>
+    </div>
+    <div class="card-body">
+        {% if food_products %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Product Price</th>
+                        <th>Product Quantity</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in food_products %}
+                        <tr>
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.expiry_date }}</td>
+                            <td>
+                                <a href="#" class="btn btn-secondary btn-sm edit-product-btn"
+                                   data-id="{{ product.id }}"
+                                   data-name="{{ product.name }}"
+                                   data-price="{{ product.price }}"
+                                   data-quantity="{{ product.quantity }}"
+                                   data-category="{{ product.category_id }}"
+                                   data-warehouse="{{ product.warehouse_id }}"
+                                   data-bs-toggle="modal" data-bs-target="#myModal">
+                                   Edit
+                                </a>
+                            </td>                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center">No Food products found. <a href="">Add a product</a>.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header bg-primary-subtle text-dark d-flex justify-content-between align-items-center">
+        <h3>Electronics Products</h3>
+        <button class="btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#myModal">Add Product</button>
+    </div>
+    <div class="card-body">
+        {% if electronics_products %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Product Price</th>
+                        <th>Product Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in electronics_products %}
+                        <tr>
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>
+                                <a href="#" class="btn btn-secondary btn-sm edit-product-btn"
+                                   data-id="{{ product.id }}"
+                                   data-name="{{ product.name }}"
+                                   data-price="{{ product.price }}"
+                                   data-quantity="{{ product.quantity }}"
+                                   data-category="{{ product.category_id }}"
+                                   data-warehouse="{{ product.warehouse_id }}"
+                                   data-bs-toggle="modal" data-bs-target="#myModal">
+                                   Edit
+                                </a>
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center">Electronics products found. <a href="">Add a product</a>.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header bg-primary-subtle text-dark d-flex justify-content-between align-items-center">
+        <h3>Stationery Products</h3>
+        <button class="btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#myModal">Add Product</button>
+    </div>
+    <div class="card-body">
+        {% if stationery_products %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Product Price</th>
+                        <th>Product Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in stationery_products %}
+                        <tr>
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>
+                                <a href="#" class="btn btn-secondary btn-sm edit-product-btn"
+                                   data-id="{{ product.id }}"
+                                   data-name="{{ product.name }}"
+                                   data-price="{{ product.price }}"
+                                   data-quantity="{{ product.quantity }}"
+                                   data-category="{{ product.category_id }}"
+                                   data-warehouse="{{ product.warehouse_id }}"
+                                   data-bs-toggle="modal" data-bs-target="#myModal">
+                                   Edit
+                                </a>
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center">Stationery products found. <a href="">Add a product</a>.</p>
+        {% endif %}
+    </div>
+</div>
+<div class="d-flex justify-content-end mt-4">
+    <a class="btn btn-dark text-white" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+</div>
+<div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="#myModalLabel"> Add Products</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm" action="{{url_for('add_product')}}" method="POST">
+
+                    <input type="hidden" name="product_id" id="productId">
+
+                    <div class="form-group mb-3">
+                        <label>Product Name</label>
+                        <input type="text" name="name" class="form-control" id="name" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Product Price</label>
+                        <input type="number" name="price" class="form-control" id="prodPrice" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Product Quantity</label>
+                        <input type="number" name="quantity" class="form-control" id="prodQuantity" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Categories</label>
+                        <select name="category_id" class="form-control" id="categorySelect" required>
+                            {% for category in categories%}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Warehouses</label>
+                        <select name="warehouse_id" class="form-control" required>
+                            {% for warehouse in warehouses %}
+                                <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="saveButton">Save</button> 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

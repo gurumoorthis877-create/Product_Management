@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Warehouse{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary-subtle text-dark d-flex justify-content-between align-items-center">
+        <h3>Warehouse</h3>
+        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#myModal">Add Warehouse</button>
+    </div>
+    <div class="card-body">
+        {% if warehouses %}
+    
+        <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Warehouse ID</th>
+                        <th>Warehouse Name</th>
+                        <th>Address</th>
+                        <th>Contact Number</th>
+                        <th>Products Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for warehouse in warehouses %}
+                        <tr>
+                            <td>{{ warehouse.id }}</td>
+                            <td>{{ warehouse.name }}</td>
+                            <td>{{ warehouse.address }}</td>
+                            <td>{{ warehouse.contactNumber }}</td>
+                            <td>
+                                <a href="{{ url_for('warehouseProducts', warehouse_id=warehouse.id) }}" class="btn btn-secondary btn-sm">View Products</a>
+                                <a href="#" class="btn btn-secondary btn-sm edit-warehouse-btn"
+                                    data-id="{{ warehouse.id }}"
+                                    data-name="{{ warehouse.name }}"
+                                    data-address="{{ warehouse.address }}"
+                                    data-contact="{{warehouse.contactNumber}}"
+                                    data-bs-toggle="modal" data-bs-target="#myModal">
+                                Edit</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center">No warehouses found. <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#myModal">Add Warehouse</button>
+            </p>
+        {% endif %}
+    </div>
+</div>
+<div class="d-flex justify-content-end mt-4">
+    <a class="btn btn-dark text-white" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Add Warehouse</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="warehouseForm" action="{{ url_for('add_warehouse') }}" method="POST">
+                    <input type="hidden" id="warehouse_id" name="warehouse_id">
+                    <div class="form-group mb-3">
+                        <label>Warehouse Name</label>
+                        <input type="text" name="name" class="form-control" id="name" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Address</label>
+                        <input type="text" name="address" class="form-control" id="address" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Contact Number</label>
+                        <input type="text" name="contact" class="form-control" id="contact" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="saveButton">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

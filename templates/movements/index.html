@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}Inventory Movement {% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary-subtle text-dark d-flex justify-content-between align-items-center">
+        <h3>Inventory Movement</h3>
+        <button class="btn btn-secondary flex-end" data-bs-toggle="modal" data-bs-target="#myModal">Move Product</button>
+    </div>
+    <div class="card-body">
+        {% if movements %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product Id</th>
+                        <th>Quantity</th>
+                        <th>From Location</th>
+                        <th>To Location</th>
+                        <th>TimeStamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movement in movements %}
+                        <tr>
+                            <td>{{ movement.product_id }}</td>
+                            <td>{{ movement.quantity }}</td>
+                            <td>{{ movement.from_location }}</td>
+                            <td>{{ movement.to_location }}</td>
+                            <td>{{ movement.timestamp }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center">No inventory data available.</p>
+        {% endif %}
+    </div>
+</div>
+<div class="d-flex justify-content-end mt-4">
+    <a class="btn btn-dark text-white" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+</div>
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="modalLabel" class="modal-title">Make Movement</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="movementForm" action="{{ url_for('add_movement') }}" method="POST">
+                    <input type="hidden" id="movement_id" name="movement_id"> 
+                    
+                    <div class="form-group mb-3">
+                        <label>Movement Type</label>
+                        <select id="movement_type" name="movement_type" class="form-select" required>
+                            <option value="">Select Type</option>
+                            <option value="sale">Sale</option>
+                            <option value="purchase">Purchase</option>
+                            <option value="transfer">Transfer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label>Product ID</label>
+                        <input type="number" id="product_id" name="product_id" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label>Quantity</label>
+                        <input type="number" id="quantity" name="quantity" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group mb-3" id="from_location_group">
+                        <label>From Location</label>
+                        <input type="text" id="from_location" name="from_location" class="form-control">
+                    </div>
+                    
+                    <div class="form-group mb-3" id="to_location_group">
+                        <label>To Location</label>
+                        <input type="text" id="to_location" name="to_location" class="form-control">
+                    </div>
+                    
+                    <button type="submit" id="saveButton" class="btn btn-primary ms-auto d-block">Save Movement</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const movementType = document.getElementById("movement_type");
+        const fromGroup = document.getElementById("from_location_group");
+        const toGroup = document.getElementById("to_location_group");
+
+        function updateLocationFields() {
+            const value = movementType.value;
+            if (value === "sale") {
+                fromGroup.style.display = "block";
+                toGroup.style.display = "none";
+            } else if (value === "purchase") {
+                fromGroup.style.display = "none";
+                toGroup.style.display = "block";
+            } else if (value === "transfer") {
+                fromGroup.style.display = "block";
+                toGroup.style.display = "block";
+            } else {
+                fromGroup.style.display = "block";
+                toGroup.style.display = "block";
+            }
+        }
+
+        movementType.addEventListener("change", updateLocationFields);
+        updateLocationFields(); 
+    });
+</script>
+{% endblock %}

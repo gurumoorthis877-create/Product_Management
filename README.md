@@ -127,5 +127,5 @@ This screen allows you to update product details and manage product information.
 - **JavaScript (jQuery)**: Used for dynamic content management.
 
 ## By 
-- Santhosh R 
+- Gurumoorthi S
 - karpagam Institute of Technology
